@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>添加随访记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="/static/css/signin.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
+    </div>
+    <div >
+        <ul class="nav navbar-nav">
+            <li><a href="/">通知</a></li>
+            <li><a href="/add_survey/">添加随访</a></li>
+            <li><a href="/surveys/">已有随访</a></li>
+            <li><a href="/statistic/">统计功能</a></li>
+            <li  class="active"><a href="/upload_pdf/">发布推送</a></li>
+            <li><a href="/docter/">医生管理</a></li>>
+        </ul>
+    </div>
+    </div>
+</nav>
+  <div class="contanier">
+    <form class="form-signin" method="post" enctype="multipart/form-data"  action="/upload_pdf/">
+<!--      <h1 class="h3 mb-3 font-weight-normal">北京中医药中医药大学</h1>-->
+      <h1 class="h3 mb-3 font-weight-normal">请输入推送信息</h1>
+      <label  class="sr-only">患者姓名</label>
+      <input name="title" type="text"  class="form-control" placeholder="推送标题" required autofocus>
+      <label class="sr-only">身份证号</label>
+      <input name="description" type="text" class="form-control" placeholder="简洁描述" required autofocus>
+      <label class="sr-only">第几次随访</label>
+      <input name="pdf_file" type="file" class="form-control" accept=".pdf">
+      <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">提交</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>
+  </div>
+    <!--<form method="post" action="/add_survey/">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                患者姓名:
+                <input type="text" name= "name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                身份证号:
+                <input type="text" name= "id">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                第几次随访:
+                <input type="text" name= "sequence">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <input type="submit" name= "submit" value="提交">
+            </div>
+        </div>
+    </div>
+    </form>-->
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>

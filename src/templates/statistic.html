@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>添加随访记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="/static/css/signin.css" rel="stylesheet">
+      <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+      <script src="/static/js/echarts.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
+    </div>
+    <div >
+        <ul class="nav navbar-nav">
+            <li><a href="/">通知</a></li>
+            <li><a href="/add_survey/">添加随访</a></li>
+            <li><a href="/surveys/">已有随访</a></li>
+            <li class="active"><a href="#">统计功能</a></li>
+            <li><a href="/upload_pdf/">发布推送</a></li>
+            <li><a href="/docter/">医生管理</a></li>>
+        </ul>
+    </div>
+    </div>
+    </nav>
+    <table>
+    <tr>
+    <td>
+    <div align="center">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="age" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('age'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '病患年龄分布'
+            },
+            tooltip: {},
+            legend: {
+                data:['数量']
+            },
+            xAxis: {
+                data: ["0~10","10~20","20~30","30~40","40~50",
+                "50~60","60~70","70~80","80~90","90~100", "100~"]
+            },
+            yAxis: {},
+            series: [{
+                name: '数量',
+                type: 'bar',
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }]
+        };
+        $.ajax({
+            url: '/api/ages/',
+            type: 'get',
+            success: function(data) {
+                data = data["ages"];
+                for (var i = 0; i < data.length; i++) {
+                    var num = parseInt(data[i]);
+                    if (num) {
+                        option["series"][0]["data"][Math.floor(Math.min(100, num) / 10)] += 1;
+                    }
+                }
+                myChart.setOption(option);
+            }
+        });
+        // 使用刚指定的配置项和数据显示图表。
+    </script>
+  </div>
+    </td>
+       <td>
+  <div align="center">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="tag" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart2 = echarts.init(document.getElementById('tag'));
+
+        // 指定图表的配置项和数据
+        var option2 = {
+            title: {
+                text: '病患疾病分期分布'
+            },
+            tooltip: {},
+            legend: {
+                data:['数量']
+            },
+            xAxis: {
+                data: ["早期","中期","晚期"]
+            },
+            yAxis: {},
+            series: [{
+                name: '数量',
+                type: 'bar',
+                data: [0, 0, 0]
+            }]
+        };
+        $.ajax({
+            url: '/api/tags/',
+            type: 'get',
+            success: function(data) {
+                data = data["tags"];
+                ind = {"早期": 0, "中期": 1, "晚期": 2};
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i] in ind) {
+                        // alert(data[i]);
+                        // alert(ind[data[i]]);
+                        // alert(option["series"][0]["data"][ind[data[i]]]);
+                        option2["series"][0]["data"][ind[data[i]]] += 1;
+                    }
+                }
+                myChart2.setOption(option2);
+            }
+        });
+        // 使用刚指定的配置项和数据显示图表。
+    </script>
+  </div>
+  </td>
+   </tr>
+    </table>
+<!--  <div class="contanier">-->
+<!--    &lt;!&ndash; 为ECharts准备一个具备大小（宽高）的Dom &ndash;&gt;-->
+<!--    <div id="2" style="width: 600px;height:400px;"></div>-->
+<!--    <script type="text/javascript">-->
+<!--        // 基于准备好的dom，初始化echarts实例-->
+<!--        var myChart = echarts.init(document.getElementById('main'));-->
+
+<!--        // 指定图表的配置项和数据-->
+<!--        var option = {-->
+<!--            title: {-->
+<!--                text: '病患年龄分布'-->
+<!--            },-->
+<!--            tooltip: {},-->
+<!--            legend: {-->
+<!--                data:['数量']-->
+<!--            },-->
+<!--            xAxis: {-->
+<!--                data: ["0~10","10~20","20~30","30~40","40~50",-->
+<!--                "50~60","60~70","70~80","80~90","90~100"]-->
+<!--            },-->
+<!--            yAxis: {},-->
+<!--            series: [{-->
+<!--                name: '数量',-->
+<!--                type: 'bar',-->
+<!--                data: [5, 20, 36, 10, 10, 5, 20, 36, 10, 10]-->
+<!--            }]-->
+<!--        };-->
+
+<!--        // 使用刚指定的配置项和数据显示图表。-->
+<!--        myChart.setOption(option);-->
+<!--    </script>-->
+<!--  </div>-->
+  </body>
+</html>

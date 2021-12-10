@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>填写随访</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+
+<script type="text/javascript">
+    function showPicture() {
+        var formData = new FormData();
+        formData.append('indexid', {{ id }})
+        formData.append('chapterid', {{ chapter_id }})
+        console.log(formData)
+        $.ajax({
+            url: "/show_img/",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (data) {
+                document.getElementById('up_img').src = data;
+            }
+        })
+    }
+
+    function changePicture() {
+        var readfile = new FileReader();
+        var f = document.getElementById('upload_input').files[0];
+        readfile.readAsDataURL(f);
+        readfile.onload = function (e) {
+            document.getElementById('up_img').src = this.result;
+        }
+    }
+
+    function confirm_up() {
+        var formData = new FormData();
+        {#console.log(formData)#}
+        var f = document.getElementById('upload_input').files[0];
+        console.log(f)
+        formData.append('img', f)
+        formData.append('indexid', {{ id }})
+        formData.append('chapterid', {{ chapter_id }})
+        $.ajax({
+            url: "{{ url_for('upload_img') }}",
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (data) {
+                if (data.signal == 1) {
+                    document.getElementById('up_success').innerHTML = '<h3 id="up_success" style="height: 20px;color: darkgreen">上传成功</h3>'
+                    document.getElementById('show_img').src = data.img_path
+
+                }
+
+            }
+        })
+
+    }
+</script>
+
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="/">通知</a></li>
+                <li class="active"><a href="/add_survey/">添加随访</a></li>
+                <li><a href="/surveys/">已有随访</a></li>
+                <li><a href="#">统计功能</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<h1 align="center"> {{ chapter_name }}表 </h1>
+<div class="container">
+    <form action="/survey/{{ id }}/{{ chapter_id }}/" method="post">
+        <table border="0">
+            {% for item in q %}
+                {% if item["type"] is equalto 0 %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ item["zh-cn"] }}</span>
+                        <input type="text" class="form-control" name="{{ item["field"] }}">
+                    </div>
+                    <br>
+                {% elif item["type"] is equalto 1 %}
+                    <div class="form-group form-inline">
+                        <tr>
+                            <td style="padding :0cm"><label>{{ item["zh-cn"] }}</label></td>
+                            {% for choice in item["items"] %}
+                                <td style="padding :0.3cm 0.3cm"><label class="radio-inline">
+                                    <input type="radio" name={{ item["field"] }} value={{ loop.index0 }}> {{ choice }}
+                                </label></td>
+                            {% endfor %}
+                        </tr>
+                    </div>
+                {% elif item["type"] is equalto 2 %}
+                    <div class="form-group form-inline">
+                        <label>{{ item["zh-cn"] }}</label>
+                        {% for choice in item["items"] %}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="{{ item["field"] }}" value={{ loop.index0 }}> {{ choice }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <!--<div class="row">
+            <div class="col-sm-2">
+              <p> {{ item["zh-cn"] }}</p>
+            </div>
+            {% for choice in item["items"] %}
+              <div class="col-sm-2" style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+                <label>
+                  <input type="checkbox" name={{ item["field"] }} value={{ loop.index0 }}> {{ choice }}
+                </label>
+              </div>
+            {% endfor %}
+          </div>-->
+                {% elif item["type"] is equalto 3 %}
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <p> {{ item["zh-cn"] }}</p>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>
+                                <input input="date" type="date" name="{{ item["field"] }}" value="0000-00-00">
+                            </label>
+                        </div>
+                    </div>
+                {% elif item["type"] is equalto 4 %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ item["zh-cn"] }}</span>
+                        <input type="number" class="input-medium" name="{{ item["field"] }}">
+                    </div>
+                {% elif item["type"] is equalto 7 %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ item["zh-cn"] }}</span>
+                        <input type="text" class="input-medium" name="{{ item["field"] }}">
+                    </div>
+                {% elif item["type"] is equalto 8 %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ item["zh-cn"] }}</span>
+                        <input type="text" class="input-medium" name="{{ item["field"] }}">
+                    </div>
+                {% elif item["type"] is equalto 9 %}
+                    <div class="input-group">
+                        <span class="input-group-addon">{{ item["zh-cn"] }}</span>
+                        <input class="input-medium" name="{{ item["field"] }}"
+                               id="{{ item["id"] }}">
+
+                    </div>
+
+{#                    <h3 class="head-w3ls">上传图片</h3>#}
+{#                    <input id="upload_input" class="admin img-fluid" type="file" onchange="changePicture(this)">#}
+{#                    <img id="up_img" onload="showPicture()" src="/static/img/up2.png" style="width:30%;height: 30%"#}
+{#                         alt="upload-image">#}
+{#                    <h4 style="height: 20px">#}
+{#                        <button onclick="confirm_up()">确定上传</button>#}
+{#                    </h4>#}
+{#                    <h2>uploading...</h2>#}
+{#                    <h3 id="up_success" style="height: 20px;"></h3>#}
+
+
+
+                {% endif %}
+            {% endfor %}
+            {#            <div class="input-group">#}
+            {#                <span class="input-group-addon">{{ item["zh-cn"] }}</span>#}
+            {#                <input type="number" class="input-medium" name="实验室检查照片路径"#}
+            {#                       value="实验室检查照片路径" id="{{ item["id"] }}">#}
+            {#            </div>#}
+
+
+        </table>
+        <input type="submit" name="submit" value="提交">
+    </form>
+</div>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

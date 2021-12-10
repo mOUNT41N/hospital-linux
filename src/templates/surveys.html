@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>所有随访</title>
+    <!--    <h1 align="center">所有随访</h1>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="/">提醒</a></li>
+                <li><a href="/add_survey/">添加随访</a></li>
+                <li class="active"><a href="/surveys/">已有随访</a></li>
+                <li><a href="/statistic/">统计功能</a></li>
+                <li><a href="/upload_pdf/">发布推送</a></li>
+                <li><a href="/docter/">医生管理</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--ul class="nav nav-pills justify-content-center">
+  <li role="presentation" class="nav-item"><a href="/">通知</a></li>
+  <li role="presentation" class="nav-item"><a href="/add_survey/">添加随访</a></li>
+  <li role="presentation" class="active nav-item"><a href="/surveys/">已有随访</a></li>
+</ul>-->
+{#<div class="container">#}
+<div>
+    <form method="get" action="/surveys/">
+        <div class="container">
+            <div class="input-group">
+                <input type="text" name="name" class="form-control input-sm"><input type="submit" value="搜索姓名">
+            </div>
+        </div>
+    </form>
+    {#        <button id="download_all" type="button" class="btn btn-primary">全部导出（暂不可用）</button>#}
+    {#        <br>#}
+    <form method="POST" action="/download/partsurveys/">
+        <input id="download_part" value="导出" type="submit" class="btn btn-primary"></input>
+<!--                <input type="text" name="gnl" value="gnlgnl">-->
+        <table class="table table-striped table-bordered table-hover dataTables-example"
+               style="word-break:break-all; word-wrap:break-all;table-layout:auto">
+            <tbody>
+            <thead>
+            <tr>
+                <th>导出</th>
+<!--                <th>随访ID</th>-->
+                <th>患者姓名</th>
+                <th>年龄</th>
+                <th>身份证号</th>
+                <th>电话</th>
+                <th>随访次序</th>
+                <th>疾病分组</th>
+                <th>上次随访时间</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                {#                <th>8</th>#}
+            </tr>
+            </thead>
+            {% for item in data %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name={{ item["id"] }} value={{ item["id"] }}>
+<!--                        <a href="/download/survey/{{ item["id"] }}/">导出</a>-->
+                    </td>
+<!--                    <td>{{ item["id"] }}</td>-->
+<!--                    {# 随访id #}-->
+                    <td>{{ item["name"] }}</td>
+                    {# 患者姓名 #}
+                    <td>{{ item["nianling"] }}</td>
+                    {# 年龄 #}
+                    <td>{{ item["id_number"] }}</td>
+                    {# 身份证号 #}
+                    <td>{{ item["phone"] }}</td>
+                    {# 电话 #}
+                    <td>{{ item["sequence"] }}</td>
+                    {# 随访次数 #}
+                    <td>{{ item["tag"] }}</td>
+                    {# 疾病分组 #}
+                    <td>{{ item["time_stamp"] }}</td>
+                    {# 时间 #}
+                    {#            {% for chapter_index in survey_info[item["sequence"]-1] %}#}
+                    {% for chapter_index in survey_info[0] %}
+                        <td>
+                            <a href="/survey/{{ item["id"] }}/{{ chapter_index }}"> {{ chapter_name[chapter_index-1] }} </a>
+                        </td>
+                    {% endfor %}
+                    <td><a href="/uploadimg/{{ item["id"] }}/">检查报告图片</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+{#</div>#}
+<nav style="text-align: center">
+    <ul class="pagination">
+        {% for item in page_info %}
+            <li class="{{ item["class"] }}"><a href="?{{ item["link"] }}">{{ item["num"] }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>
+{#<script type="text/javascript">#}
+{#    $(document).ready(function () {#}
+{#        $("#download_all").click(function () {#}
+{#            location.href = "/download/surveys/";#}
+{#        });#}
+{#    });#}
+{#</script>#}
+
+{#<script type="text/javascript">#}
+{#    $(document).ready(function () {#}
+{#        $("#download_part").click(function () {#}
+{#            var data = {}#}
+{#            data = $('#form1').serialize();#}
+{#            $.ajax({#}
+{#                type: "POST",#}
+{#                url: "/download/partsurveys/",#}
+{#                data: data,#}
+{#                success: function (data) {#}
+{#                },#}
+{#                error: function (xhr, type) {#}
+{#                }#}
+{#            });#}
+{#            location.href = "/download/partsurveys/";#}
+{##}
+{#        });#}
+{#    });#}
+{#</script>#}
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>

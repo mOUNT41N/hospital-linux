@@ -1,0 +1,49 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>登录页</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/js/md5.js"></script>
+      <script type="text/javascript">
+      function crypt()
+      {
+        document.login.passwd.value = hex_md5(document.login.passwd.value);
+<!--        return false;-->
+      }
+  </script>
+  </head>
+
+  <body bgcolor="#afdfe4">
+
+    <form name="login" class="form-signin" method="post">
+<!--      <h1 class="h3 mb-3 font-weight-normal">北京中医药中医药大学</h1>-->
+      <h1 class="h3 mb-3 font-weight-normal">病人随访管理系统</h1>
+      <label  class="sr-only">Name</label>
+      <input name="username" type="text"  class="form-control" placeholder="Name" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input name="passwd" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <div class="checkbox mb-3">
+        <label>
+          <input name="remember-me" type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="crypt();">Sign in</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>
+  </body>
+</html>
