@@ -17,7 +17,7 @@ from flask import send_file
 from flask import session
 # from pyecharts import options as opt
 # from pyecharts.charts import Bar
-#from pyecharts.charts import Line
+# from pyecharts.charts import Line
 from pyecharts import Line
 from PIL import Image
 
@@ -32,21 +32,21 @@ import zipfile
 from utility import require_login, md5_hash
 from urllib.parse import quote
 import os
+
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'
 
-#reload(sys)
-#sys.setdefaultencoding('utf8')  
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 
 app = Flask(__name__)
-#app = flask.Flask(__name__)
+# app = flask.Flask(__name__)
 app.config.from_object("settings")
 app.register_blueprint(sms.bp)
 app.register_blueprint(api.bp)
-#app.secret_key = "2017140836"
+# app.secret_key = "2017140836"
 app.secret_key = "2018211620"
 basedir = os.path.abspath(os.path.dirname(__file__))
 ALLOWED_EXTENSIONS = (['pdf'])
-
 
 
 # 主页,显示需要通知下一次的随访记录
@@ -76,7 +76,7 @@ def index():
     for i in range(len(data)):
         if data[i]['time_stamp2'] is not None:
             if (data[i]['time_stamp2'] - datetime.datetime.now()).days < 30:
-#                #print(data[i]['name'], " ", data[i]['time_stamp2'])
+                #                #print(data[i]['name'], " ", data[i]['time_stamp2'])
                 send_data.append(data[i])
         # else:
         #     now = datetime.datetime.now()
@@ -159,12 +159,10 @@ def add_survey():
         time_stamp2 = datetime.datetime.strptime(temptime2, '%Y-%m-%d %H:%M')
 
         number = request.form['id_number']
-        if number is not None and number != "" and len(number) == 18:
-            birthday = number[6:14]  # 出生年月日
-            birth_year = birthday[0:4]  # 前四位
-            age = datetime.datetime.now().year - int(birth_year)  # int换算
-        else:
-            age = number
+        birthday = number  # 出生年月日
+        birthday = birthday.replace("-",'')
+        birth_year = birthday[0:4]  # 前四位
+        age = datetime.datetime.now().year - int(birth_year)  # int换算
         # age = int(age)
         # #print(time_stamp)
         with db.cur() as cursor:
@@ -206,31 +204,31 @@ def add_survey():
                         print("maxid", maxid)
                         tempdata = []
                         fields = ""
-                        format_=""
+                        format_ = ""
                         if info is not None:
                             for k in info:
                                 if info[k] is not None and info[k] != '':
                                     if type(info[k]) == type(1):
-                                        format_+="'%d',"
+                                        format_ += "'%d',"
                                     else:
-                                        format_+="'%s'," 
-                                    fields+=k
+                                        format_ += "'%s',"
+                                    fields += k
                                     fields += ","
                                     if k == 'id':
                                         tempdata.append(maxid['MAX(id)'])
                                     else:
                                         tempdata.append(info[k])
-                                    
+
                             print("info:", info)
                             print("fields", fields[:-1])
                             print("temdata:", tempdata)
-                            
+
                             sql = "replace into chapter1 "
-#                            tempdata[0] = maxid['MAX(id)']
+                            #                            tempdata[0] = maxid['MAX(id)']
                             print(len(tempdata))
                             fields = fields[:-1]
                             format_ = format_[:-1]
-                            print("format:",format_)
+                            print("format:", format_)
                             sql = (sql + "(" + fields + ")" + "values(" + format_ + ")") % tuple(tempdata)
                             print(sql)
                             cursor.execute(sql)
@@ -350,19 +348,19 @@ def survey_edit(survey_id, chapter_id):
                 # #print(data[46])
             sql = (sql + "(" + fields + ")" + "values(" + format_ + ")") % tuple(data)
             cursor.execute(sql)
-#            #print("sql:", sql)
+            #            #print("sql:", sql)
             # #print("fields:", fields)
             # #print("data:", data)
             if int(chapter_id) == 1:
-#                #print("chapterid==1",1)
+                #                #print("chapterid==1",1)
                 cursor.execute(
                     "select id from suifang where id_number = (select id_number from suifang where id = %s)" % survey_id)
                 info = cursor.fetchall()
-                #print("info:", info)
+                # print("info:", info)
                 idlist = []
                 for i in range(len(info)):
                     idlist.append(info[i]["id"])
-#                #print("idlist", idlist)
+                #                #print("idlist", idlist)
                 for i in range(len(idlist)):
                     # fields[0] = idlist[i]
                     sql = "replace into chapter1 "
@@ -370,32 +368,32 @@ def survey_edit(survey_id, chapter_id):
                     # #print("fields:", fields)
                     # #print("data:", data, "datalen:", len(data))
                     sql = (sql + "(" + fields + ")" + "values(" + format_ + ")") % tuple(data)
-#                    #print("sql:", sql)
+                    #                    #print("sql:", sql)
                     cursor.execute(sql)
 
             # 疾病分组计算
             sql = "select niaobaidanbaijihang, xiaoshiniaodanbaidingliang,eGFR from chapter7 where id = %s" % survey_id
             cursor.execute(sql)
-            info = cursor.fetchall()	
-            logging.warning(cursor)            
+            info = cursor.fetchall()
+            logging.warning(cursor)
             if not info:
                 return redirect("/surveys/")
-#            logging.warning('infolen{}'.format((info)))
+            #            logging.warning('infolen{}'.format((info)))
             niaobaidanbaijihang = info[0]["niaobaidanbaijihang"]
             xiaoshiniaodanbaidingliang = info[0]["xiaoshiniaodanbaidingliang"]
             eGFR = info[0]["eGFR"]
             print("eGFR:", eGFR)
             flag = 0
-                # 早期
-            if niaobaidanbaijihang  and niaobaidanbaijihang != '' and xiaoshiniaodanbaidingliang and xiaoshiniaodanbaidingliang != '':
+            # 早期
+            if niaobaidanbaijihang and niaobaidanbaijihang != '' and xiaoshiniaodanbaidingliang and xiaoshiniaodanbaidingliang != '':
                 if float(niaobaidanbaijihang) >= 30 and int(xiaoshiniaodanbaidingliang) <= 500:
                     print("tag is early")
-                    flag =1
-                        # with db.cur() as cursor:
-                        #     cursor.execute("select name,id_number from suifang where id = %s" % survey_id)
-                        #     #print(cursor.fetchall())
+                    flag = 1
+                    # with db.cur() as cursor:
+                    #     cursor.execute("select name,id_number from suifang where id = %s" % survey_id)
+                    #     #print(cursor.fetchall())
                     with db.cur() as cursor:
-                        cursor.execute("update suifang set tag = '早期' where id = %s " % survey_id)    
+                        cursor.execute("update suifang set tag = '早期' where id = %s " % survey_id)
             if xiaoshiniaodanbaidingliang and xiaoshiniaodanbaidingliang != '' and eGFR and eGFR != '':  # 中期
                 if int(xiaoshiniaodanbaidingliang) >= 500 and float(eGFR) >= 30:
                     flag = 1
@@ -441,10 +439,10 @@ def auto_BMI(survey_id):
             cursor.execute("select xingbie from chapter1 where id='%s'" % survey_id)
             info = cursor.fetchone()
             # nianling = float(info["nianling"])
-            if info is not None and info["xingbie"] is not None: 
+            if info is not None and info["xingbie"] is not None:
                 xingbie = info["xingbie"]
             else:
-                return "请填写性别" 	
+                return "请填写性别"
                 xingbie = None
             cursor.execute("select nianling from suifang where id = '%s'" % survey_id)
             # 取得年龄
@@ -459,17 +457,17 @@ def auto_BMI(survey_id):
                 return "请填写Scr"
                 Scr = None
 
-#            #print("survey_id", survey_id)
-#            #print("xingbie:", xingbie)
-#            #print("nianling", nianling)
-#            #print("Scr", Scr)
-		
-            if xingbie is not None and nianling is not None and Scr is not None and xingbie != '' and nianling != '' and Scr !='':
+            #            #print("survey_id", survey_id)
+            #            #print("xingbie:", xingbie)
+            #            #print("nianling", nianling)
+            #            #print("Scr", Scr)
+
+            if xingbie is not None and nianling is not None and Scr is not None and xingbie != '' and nianling != '' and Scr != '':
                 xingbie = int(xingbie)
                 nianling = float(nianling)
-                print("xingbie",xingbie)
-                print("nianling",nianling)
-                print("Scr",Scr)
+                print("xingbie", xingbie)
+                print("nianling", nianling)
+                print("Scr", Scr)
                 Scr = float(Scr) / 88.4
                 b = -1.209
                 c = 0.993
@@ -486,7 +484,7 @@ def auto_BMI(survey_id):
                 return "请检查是否填写性别与Scr"
                 eGFR = 0
             with db.cur() as cursor:
-                #print("eGFR type:", type(eGFR))
+                # print("eGFR type:", type(eGFR))
                 cursor.execute("update chapter7 set eGFR=%s where id=%s" % (eGFR, survey_id))
             return redirect("/surveys/")
 
@@ -521,8 +519,8 @@ def history_charts(name_id, survey_id):
             for info_id in info:
                 count_id.append(info_id["id"])
                 sequence.append(str(i))
-                i +=1
-#               sequence.append(str(info_id["sequence"]))
+                i += 1
+            #               sequence.append(str(info_id["sequence"]))
             for count in count_id:
                 with db.cur() as cursor:
                     cursor.execute("select %s from chapter7 where id='%s'" % (survey_id, count))
@@ -546,17 +544,18 @@ def history_charts(name_id, survey_id):
             line = Line()
             # 添加柱状图的数据及配置项
 
-#            line.add_xaxis(xaxis_data=sequence)
+            #            line.add_xaxis(xaxis_data=sequence)
             for a in questions.chapters["chapter7"]:
                 if survey_id == a["field"]:
                     b = a["zh-cn"]
                     break
             ##print(data)
-            line.add(b, sequence, data,mark_point_symbol="diamond", mark_line=["max", "average","min"],is_label_show=True)
-#            line.add_yaxis(b, data)
-#            line.set_series_opts(markpoint_opts=opt.MarkPointOpts(data=[opt.MarkPointItem(type_="max", name="最大值"),
-#                                                                        opt.MarkPointItem(type_="min", name="最小值")]),
-#                                 markline_opts=opt.MarkLineOpts(data=[opt.MarkLineItem(type_="average", name="平均值")]))
+            line.add(b, sequence, data, mark_point_symbol="diamond", mark_line=["max", "average", "min"],
+                     is_label_show=True)
+            #            line.add_yaxis(b, data)
+            #            line.set_series_opts(markpoint_opts=opt.MarkPointOpts(data=[opt.MarkPointItem(type_="max", name="最大值"),
+            #                                                                        opt.MarkPointItem(type_="min", name="最小值")]),
+            #                                 markline_opts=opt.MarkLineOpts(data=[opt.MarkLineItem(type_="average", name="平均值")]))
 
             # 生成本地文件（默认为.html文件）
             line.render("./templates/mycharts.html")
@@ -578,7 +577,7 @@ def partsurveys_download():
         return redirect("/surveys/")
     if request.method == 'POST':
         ##print("DOWNLOAD POST!!!!!!!!\n\n\n\n")
-    
+
         # #print("post:", end='')
         # data = request.form.get("2")
         # #print("data:", data, end="")
@@ -603,7 +602,7 @@ def partsurveys_download():
             # #print("data", i + 1, data)
         # #print("outlist:", out_list)
         # 初始化header
-        header = ["患者姓名","年龄","身份证号","电话","随访次序","疾病分组","上次随访时间"]       
+        header = ["患者姓名", "年龄", "身份证号", "电话", "随访次序", "疾病分组", "上次随访时间"]
         for chapter_index in questions.survey_info[0]:
             for q in questions.chapters["chapter" + str(chapter_index)]:
                 if q["field"] == "id":
@@ -616,7 +615,9 @@ def partsurveys_download():
         for index in range(len(out_list)):
             tempData = []
             with db.cur() as cursor:
-                cursor.execute("select name,nianling, id_number,phone,sequence,tag,time_stamp from suifang where id=%s"%out_list[index])
+                cursor.execute(
+                    "select name,nianling, id_number,phone,sequence,tag,time_stamp from suifang where id=%s" % out_list[
+                        index])
                 info = cursor.fetchone()
                 tempData.append(info["name"])
                 tempData.append(info["nianling"])
@@ -625,8 +626,7 @@ def partsurveys_download():
                 tempData.append(info["sequence"])
                 tempData.append(info["tag"])
                 tempData.append(info["time_stamp"])
-              
-            
+
             for chapter_index in questions.survey_info[0]:
                 if chapter_index == 4 or chapter_index == 9:  # chapter4,9 的内容未定义 跳过
                     continue
@@ -671,33 +671,33 @@ def partsurveys_download():
             os.makedirs(file_dir)
         file_name = os.path.join(file_dir, "部分选择" + ".csv")
         # csvfile = open(file_name, "w", encoding="utf-8")
-        csvfile = open(file_name, "w",encoding="utf-8_sig")
-#        csvfile.write(codecs.BOM_UTF8)
+        csvfile = open(file_name, "w", encoding="utf-8_sig")
+        #        csvfile.write(codecs.BOM_UTF8)
         writer = csv.writer(csvfile)
         # writer.writerow(['\uFEFF'])
         writer.writerow(header)
-#        #print(header)
+        #        #print(header)
         for i in range(len(data_list)):
             writer.writerow(data_list[i])
-#            #print(data_list[i])
+        #            #print(data_list[i])
         # writer.writerow(data)
         csvfile.close()
         temp_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         temp_time = temp_time.replace(" ", "_")
         latinfilename = ("部分选择：" + str(temp_time) + ".csv").encode("utf-8").decode("latin1")
-#        file_name = quote(file_name)
-#        gunicornfilename = quote(str(temp_time) + ".csv")
-#        #print(gunicornfilename)
-#        return send_file(file_name, as_attachment=True, attachment_filename=gunicornfilename)
+        #        file_name = quote(file_name)
+        #        gunicornfilename = quote(str(temp_time) + ".csv")
+        #        #print(gunicornfilename)
+        #        return send_file(file_name, as_attachment=True, attachment_filename=gunicornfilename)
         return send_file(file_name, as_attachment=True, attachment_filename=latinfilename)
         return send_file(file_name, as_attachment=True, attachment_filename="部分选择：" + str(temp_time) + ".csv")
         # return redirect("/surveys/")
 
 
 ## 导出某一次随访
-#@app.route('/download/survey/<survey_id>/')
-#@require_login
-#def survey_download(survey_id):
+# @app.route('/download/survey/<survey_id>/')
+# @require_login
+# def survey_download(survey_id):
 #    header = []
 #    data = []
 #    with db.cur() as cursor:
@@ -1034,10 +1034,10 @@ def upload_img():
     img = request.files.get('img')
     # #print('_img:', img)
     Basepath = os.path.abspath(os.path.dirname(__file__))
-    #print("Basepath:", Basepath)
+    # print("Basepath:", Basepath)
     path = Basepath + '/static/upload/'
     img_path = path + imgfilename
-    #print("img_path", img_path)
+    # print("img_path", img_path)
     test_path = '../static/upload/' + imgfilename
     # #print("_img:", img)
     img.save(img_path)
@@ -1056,9 +1056,9 @@ def show_img():
     imgfilename = "/static/img/up2.png"
     Basepath = os.path.abspath(os.path.dirname(__file__))
     tempimgfilename = Basepath + '/static/upload/' + tempname
-    #print(tempimgfilename)
+    # print(tempimgfilename)
     if os.path.exists(tempimgfilename):
-        #print("Success!!!!!")
+        # print("Success!!!!!")
         return jsonify("/static/upload/" + tempname)
     else:
         print("Failure!!!")
@@ -1120,7 +1120,7 @@ def downloadimg(survey_id):
     if request.method == "GET":
         print("get download img")
     if request.method == "POST":
-        #print("POST DOWNLOAD IMG")
+        # print("POST DOWNLOAD IMG")
         with db.cur() as cursor:
             cursor.execute("select name, sequence, pic_num from suifang where id = '%s'" % survey_id)
             temp_dt = cursor.fetchone()
@@ -1140,14 +1140,28 @@ def downloadimg(survey_id):
                 zip_file.write(root + tempfile, tempname + "/" + tempfile)
                 # #print("tempfile:", tempfile)
         zipname = path + tempname + ".zip"
-        #print("zipname:", zipname)
+        # print("zipname:", zipname)
         zip_file.close()
-        latinfilename = (tempname+'.zip').encode("utf-8").decode("latin1")
+        latinfilename = (tempname + '.zip').encode("utf-8").decode("latin1")
         return send_file(zipname, as_attachment=True, attachment_filename=latinfilename)
+
+
 #        return send_file(zipname, as_attachment=True, attachment_filename=tempname + ".zip")
-        # return redirect("/uploadimg/%s" % survey_id)
+# return redirect("/uploadimg/%s" % survey_id)
+
+
+@app.route('/test', methods=["get", "post"])
+def testfunc():
+    print("hello")
+    if request.method == "POST":
+        temp = ""
+        temp = request.form["id_number"]
+        temp = temp.replace('-', '')
+        print(temp)
+
+    return render_template("test.html")
 
 
 if __name__ == "__main__":
-     app.run(host=app.config["HOST"], port=app.config["PORT"], debug=True)
+    app.run(host=app.config["HOST"], port=app.config["PORT"], debug=True)
 #    app.run(host='0.0.0.0', port=5000)

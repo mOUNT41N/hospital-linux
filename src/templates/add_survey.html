@@ -179,17 +179,6 @@
     <form class="form-signin" method="post" action="/add_survey/">
         <!--      <h1 class="h3 mb-3 font-weight-normal">北京中医药中医药大学</h1>-->
         <h1 class="h3 mb-3 font-weight-normal">请输入本次随访信息</h1>
-        {#        <label class="sr-only">患者姓名</label>#}
-        {#        <input id="names" onkeyup="fuzzysearch()"#}
-        {#               name="name" type="text" class="form-control" placeholder="姓名" required#}
-        {#               autofocus>#}
-        {#        <label class="sr-only">身份证号/年龄</label>#}
-        {#        <input id="id_number" onchange="showCusnames()" name="id_number" type="text" class="form-control"#}
-        {#               placeholder="身份证号"#}
-        {#               required autofocus>#}
-        {#        <label class="sr-only">电话</label>#}
-        {#        <input id="phones" onchange="showCusnames()" name="phone" type="text" class="form-control" placeholder="电话"#}
-        {#               required autofocus>#}
 
         <label class="sr-only">患者姓名</label>
         <input id="names" name="name" onchange="getIdnumbers();getPhone();" type="text" class="form-control"
@@ -197,8 +186,12 @@
                autofocus>
         <datalist id="customer_names"></datalist>
 
-        <label class="sr-only">身份证号</label>
-        <input id="id_number" name="id_number" type="text" class="form-control" placeholder="身份证号/年龄" list="idnumbers"
+<!--        <label class="sr-only">身份证号</label>-->
+<!--        <input id="id_number" name="id_number" type="text" class="form-control" placeholder="身份证号/年龄" list="idnumbers"-->
+<!--               required autofocus>-->
+<!--        <datalist id="idnumbers"></datalist>-->
+        <label class="sr-only">生日</label>
+        <input id="id_number" name="id_number" type="text" pattern="^[0-9]{8}$" class="form-control" placeholder="生日" list="idnumbers"
                required autofocus>
         <datalist id="idnumbers"></datalist>
 <!--pattern="^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$"-->
