@@ -157,12 +157,12 @@ def add_survey():
         temptime2 = request.form['time2']
         temptime2 = temptime2.replace("T", ' ')
         time_stamp2 = datetime.datetime.strptime(temptime2, '%Y-%m-%d %H:%M')
-
         number = request.form['id_number']
         birthday = number  # 出生年月日
-        birthday = birthday.replace("-",'')
+        birthday = birthday.replace("-", '')
         birth_year = birthday[0:4]  # 前四位
         age = datetime.datetime.now().year - int(birth_year)  # int换算
+
         # age = int(age)
         # #print(time_stamp)
         with db.cur() as cursor:
@@ -235,9 +235,12 @@ def add_survey():
                         break
             else:  # 原来没有这个人
                 # #print("There is new man:", request.form["name"])
+                id_number = number + " "
+                id_number = id_number + str(time_stamp).replace(" ", "")[0:10]
+                # print(id_number)
                 sql = "insert into suifang (name, id_number, phone,sequence, time_stamp, docter_name, time_stamp2, nianling) values ( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%d')"
                 cursor.execute(
-                    sql % (request.form["name"], request.form["id_number"], request.form["phone"],
+                    sql % (request.form["name"], id_number, request.form["phone"],
                            int(1), time_stamp,
                            request.form["docter_name"], time_stamp2, age))
         # #print("time:", request.form['time'])
