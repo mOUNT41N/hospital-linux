@@ -412,7 +412,7 @@ def survey_edit(survey_id, chapter_id):
             if flag == 0:
                 print("tag is none")
                 with db.cur() as cursor:
-                    cursor.execute("update suifang set tag = '正常或缺少Scr' where id = %s " % survey_id)
+                    cursor.execute("update suifang set tag = '正常' where id = %s " % survey_id)
             # #print(tmp)
             # #print(tmp)
             # #print(data)
