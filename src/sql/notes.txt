@@ -1,0 +1,2 @@
+utf8mb4_0900_ai_ci全部替换为utf8_general_ci
+utf8mb4替换为utf8
