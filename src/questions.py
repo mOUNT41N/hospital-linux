@@ -61,7 +61,7 @@ chapters = {
          "items": ["无", "安静略有汗出，动则汗出增多", "安静时即有明显汗出，动则多汗", "安静时即汗多，活动则大汗欲脱"]},
         {"field": "touyunmuxuan", "type": 1, "zh-cn": "头晕目眩",
          "items": ["无", "不因猛然起立，有时发生", "不因猛然起立，经常发生", "不因猛然起立，反复发作，不易缓解"]},
-        {"field": "jingshaosedan", "type": 1, "zh-cn": "头晕目眩",
+        {"field": "jingshaosedan", "type": 1, "zh-cn": "经少色淡",
          "items": ["无", "经量偏少，经色较淡", "月经量少，月经色淡", "经量少甚或闭经，经色极淡"]},
         {"field": "yangankouke", "type": 1, "zh-cn": "咽干口渴",
          "items": ["无", "偶有", "咽干口渴喜饮", "咽干口渴多饮"]},
@@ -190,7 +190,7 @@ chapters = {
         {"field": "jingneizhongmohouduyou", "type": 8, "zh-cn": "颈内中膜厚度右(mm)"},
         {"field": "yandijiancha", "type": 8, "zh-cn": "眼底检查"},
         {"field": "ectjiancha", "type": 8, "zh-cn": "ect检查"},
-        {"field": "zhaopianlujing", "type":9, "zh-cn": "实验室照片路径"},
+        {"field": "zhaopianlujing", "type":9, "zh-cn": "实验室照片路径(无用)"},
     ],
     "chapter8": [
         {"field": "yinshixiguanzuijin", "type": 2, "zh-cn": "饮食习惯(最近)",
@@ -216,4 +216,4 @@ chapter_name = ["基本情况", "病史情况", "生活习惯情况", "请勿点
 # ]
 
 # 更改survey_info 为一个矩阵每次显示所有信息
-survey_info = [[1, 2, 3, 4, 5, 6, 7]]
+survey_info = [[1, 2, 3, 5, 6, 7]]

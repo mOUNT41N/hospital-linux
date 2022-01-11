@@ -1153,6 +1153,51 @@ def downloadimg(survey_id):
 # return redirect("/uploadimg/%s" % survey_id)
 
 
+@app.route('/medicalhistory/<survey_id>/', methods=["get", "post"])
+@require_login
+def medicalhistory(survey_id):
+    sql = "select id from suifang where id = '%s'" % survey_id
+    with db.cur() as cursor:
+        cursor.execute(sql)
+        data = cursor.fetchone()
+    sql = "select * from medicalhistory where survey_id = '%s'" % survey_id
+    with db.cur() as cursor:
+        cursor.execute(sql)
+        temp = cursor.fetchall()
+        if len(temp) != 0:
+            # data = {'id': temp["survey_id"]}
+            data = temp
+            data.sort(key=lambda x: x["starttime"], reverse=True)
+            # print("hello")
+    # return render_template("medicalhistory.html")
+    return render_template("medicalhistory.html", data=data, survey_id=survey_id)
+
+
+@app.route('/medicalhistory/<survey_id>/add/', methods=["get", "post"])
+@require_login
+def medicalhistoryadd(survey_id):
+    # sql = "select * from suifang where id = %s" % survey_id
+    # with db.cur() as cursor:
+    #     cursor.execute(sql)
+    #     data = cursor.fetchall()
+    if request.method == "GET":
+        sql = "select id from suifang where id = '%s'" % survey_id
+        with db.cur() as cursor:
+            cursor.execute(sql)
+            data = cursor.fetchone()
+        # print(data)
+        return render_template("medical_add.html", data=data)
+    if request.method == "POST":
+        sql = "insert into medicalhistory(survey_id,medicinename,medicinesize,medicinecount,starttime) values('%d','%s','%s','%s','%s')"
+        with db.cur() as cursor:
+            cursor.execute(
+                sql % (int(survey_id), request.form["medicinename"], request.form["medicinesize"],
+                       request.form["medicinecount"], request.form["starttime"]))
+        return redirect("/medicalhistory/%s" % survey_id)
+        # return "hello" + survey_id
+    return survey_id + "add"
+
+
 @app.route('/test', methods=["get", "post"])
 def testfunc():
     print("hello")

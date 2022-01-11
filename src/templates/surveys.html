@@ -33,15 +33,15 @@
 </ul>-->
 {#<div class="container">#}
 <div>
-    <form method="get" action="/surveys/">
-        <div class="container">
-            <div class="input-group">
-                <input type="text" name="name" class="form-control input-sm"><input type="submit" value="搜索姓名">
-            </div>
-        </div>
-    </form>
-    {#        <button id="download_all" type="button" class="btn btn-primary">全部导出（暂不可用）</button>#}
-    {#        <br>#}
+<!--    <form method="get" action="/surveys/">-->
+<!--        <div class="container">-->
+<!--            <div class="input-group">-->
+<!--                <input type="text" name="name" class="form-control input-sm"><input type="submit" value="搜索姓名">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--    {#        <button id="download_all" type="button" class="btn btn-primary">全部导出（暂不可用）</button>#}-->
+<!--    {#        <br>#}-->
     <form method="POST" action="/download/partsurveys/">
         <input id="download_part" value="导出" type="submit" class="btn btn-primary"></input>
 <!--                <input type="text" name="gnl" value="gnlgnl">-->
@@ -67,7 +67,6 @@
                 <th>6</th>
                 <th>7</th>
                 <th>8</th>
-                {#                <th>8</th>#}
             </tr>
             </thead>
             {% for item in data %}
@@ -99,6 +98,7 @@
                         </td>
                     {% endfor %}
                     <td><a href="/uploadimg/{{ item["id"] }}/">检查报告图片</a></td>
+                    <td><a href="/medicalhistory/{{ item["id"] }}/">用药历史</a></td>
                 </tr>
             {% endfor %}
             </tbody>

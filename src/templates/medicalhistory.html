@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>医生列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+</head>
+<body>
+<!--<ul class="nav nav-pills justify-content-center">
+  <li role="presentation" class="active nav-item"><a href="/">通知</a></li>
+  <li role="presentation" class="nav-item"><a href="/add_survey/">添加随访</a></li>
+  <li role="presentation" class="nav-item"><a href="/surveys/">已有随访</a></li>
+</ul>-->
+<nav class="navbar navbar-inverse" role="navigation" class="navbar-collapse" style="text-align:center;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
+        </div>
+        <div class="navbar-collapse" style="text-align:center;">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">提醒</a></li>
+                <li><a href="/add_survey/">添加随访</a></li>
+                <li><a href="/surveys/">已有随访</a></li>
+                <li><a href="/statistic/">统计功能</a></li>
+                <li><a href="/upload_pdf/">发布推送</a></li>
+                <li><a href="/docter/">医生管理</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div>
+    <a type="submit" class="btn btn-primary" href="/medicalhistory/{{ survey_id }}/add/"> 添加用药记录 </a>
+</div>
+
+<div class="container">
+    <div>
+        <table class="table table-striped table-bordered table-hover dataTables-example"
+               style="word-break:break-all; word-wrap:break-all;table-layout:fixed">
+            <tbody>
+            <thead>
+            <tr>
+                <th>药物名称</th>
+                <th>剂量</th>
+                <th>频次(每日)</th>
+                <th>开始日期</th>
+            </tr>
+            </thead>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item["medicinename"] }}</td>
+                    <td>{{ item["medicinesize"] }}</td>
+                    <td>{{ item["medicinecount"] }}</td>
+                    <td>{{ item["starttime"] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
