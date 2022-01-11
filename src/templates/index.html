@@ -40,9 +40,9 @@
             <tbody>
             <thead>
             <tr>
-                <th>随访ID</th>
+<!--                <th>随访ID</th>-->
                 <th>患者姓名</th>
-                <th>身份证号后四位</th>
+                <th>患者生日</th>
                 <th>随访次序</th>
                 <th>上次随访时间</th>
                 <th>下次随访时间</th>
@@ -51,9 +51,9 @@
             </thead>
             {% for item in data %}
                 <tr>
-                    <td>{{ item["id"] }}</td>
+<!--                    <td>{{ item["id"] }}</td>-->
                     <td>{{ item["name"] }}</td>
-                    <td>{{ item["id_number"][-4:] }}</td>
+                    <td>{{ item["id_number"][11:15] }}</td>
                     <td>{{ item["sequence"] }}</td>
                     <td>{{ item["time_stamp"] }}</td>
                     <td>{{ item["time_stamp2"] }}</td>
