@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>医生列表</title>
+    <title>用药情况</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -41,18 +41,22 @@
             <tbody>
             <thead>
             <tr>
+                <th>疾病名称</th>
                 <th>药物名称</th>
                 <th>剂量</th>
                 <th>频次(每日)</th>
                 <th>开始日期</th>
+                <th>删除</th>
             </tr>
             </thead>
             {% for item in data %}
                 <tr>
+                    <td>{{ item["diseasename"]  }}</td>
                     <td>{{ item["medicinename"] }}</td>
                     <td>{{ item["medicinesize"] }}</td>
                     <td>{{ item["medicinecount"] }}</td>
                     <td>{{ item["starttime"] }}</td>
+                    <td><form method="post" action="/medicalhistory/{{ survey_id }}/delete/{{ item["id"] }}/"><button class="btn btn-primary btn-block" type="submit" name="submit">删除</button></form></td>
                 </tr>
             {% endfor %}
             </tbody>

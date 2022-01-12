@@ -1188,14 +1188,26 @@ def medicalhistoryadd(survey_id):
         # print(data)
         return render_template("medical_add.html", data=data)
     if request.method == "POST":
-        sql = "insert into medicalhistory(survey_id,medicinename,medicinesize,medicinecount,starttime) values('%d','%s','%s','%s','%s')"
+        sql = "insert into medicalhistory(survey_id,medicinename,medicinesize,medicinecount,starttime,diseasename) values('%d','%s','%s','%s','%s','%s')"
         with db.cur() as cursor:
             cursor.execute(
                 sql % (int(survey_id), request.form["medicinename"], request.form["medicinesize"],
-                       request.form["medicinecount"], request.form["starttime"]))
+                       request.form["medicinecount"], request.form["starttime"], request.form["diseasename"]))
         return redirect("/medicalhistory/%s" % survey_id)
         # return "hello" + survey_id
     return survey_id + "add"
+
+
+@app.route('/medicalhistory/<survey_id>/delete/<medical_id>/', methods=["post"])
+@require_login
+def medicalhistorydelete(survey_id, medical_id):
+    if request.method == "POST":
+        sql = "delete from medicalhistory where id = '%s'" % medical_id
+        with db.cur() as cursor:
+            cursor.execute(sql)
+        return redirect("/medicalhistory/%s" % survey_id)
+    return "delete bro"
+    # return render_template("medicalhistory.html", data=data, survey_id=survey_id)
 
 
 @app.route('/test', methods=["get", "post"])
