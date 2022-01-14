@@ -6,12 +6,10 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/signin.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 </head>
 <script>
     function fuzzysearch() {
@@ -92,16 +90,15 @@
                 },
                 success: function (customer_phone) {
 //                    console.log("phone:", customer_phone);  //在console中查看数据
-				document.getElementById("phone").value="";
-				var parent = $("#customer_phones")[0];
-				var childArray = parent.children;
-				var len  = childArray.length;
+                    document.getElementById("phone").value = "";
+                    var parent = $("#customer_phones")[0];
+                    var childArray = parent.children;
+                    var len = childArray.length;
 //				console.log("parent",parent)
-				while(len>0)
-				{
-					len--;
-					parent.removeChild(childArray[len]);
-				}
+                    while (len > 0) {
+                        len--;
+                        parent.removeChild(childArray[len]);
+                    }
                     for (var i = 0; i < customer_phone.length; i++) {
                         $("#customer_phones").append('<option value="' + customer_phone[i] + '"></option>');
                     }
@@ -126,15 +123,15 @@
                 },
                 success: function (id_numbers) {
                     console.log(id_numbers);  //在console中查看数据
-                    document.getElementById("id_number").value="";
+                    document.getElementById("id_number").value = "";
                     var parent = $("#idnumbers")[0];
                     var childArray = parent.children;
-                    var len = childArray.length;$("#idnumbers")
+                    var len = childArray.length;
+                    $("#idnumbers")
 
-                    while(len>0)
-                    {
-                    	len--;
-                    	parent.removeChild(childArray[len]);
+                    while (len > 0) {
+                        len--;
+                        parent.removeChild(childArray[len]);
                     }
                     for (var i = 0; i < id_numbers.length; i++) {
                         $("#idnumbers").append('<option value="' + id_numbers[i] + '"></option>');
@@ -151,15 +148,16 @@
 
 
 <body onload="getDocter();getCustomer();">
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<!--<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >-->
+<nav class="navbar navbar-inverse" role="navigation" class="navbar-collapse" style="text-align:center;">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">北京中医药大学东直门医院</a>
         </div>
-        <div>
+        <div class="navbar-collapse" style="text-align:center;">
             <ul class="nav navbar-nav">
-                <li><a href="/">提醒</a></li>
-                <li class="active"><a href="/add_survey/">添加随访</a></li>
+                <li class="active"><a href="/">提醒</a></li>
+                <li><a href="/add_survey/">添加随访</a></li>
                 <li><a href="/surveys/">已有随访</a></li>
                 <li><a href="/statistic/">统计功能</a></li>
                 <li><a href="/upload_pdf/">发布推送 </a></li>
@@ -169,97 +167,47 @@
     </div>
 </nav>
 
-{#<div class="ui-widget">#}
-{#    <label for="tags">Tags:</label>#}
-{#    <input id="tags" onkeyup="fuzzysearch()">#}
-{#</div>#}
-
-
-<div class="contanier">
-    <form class="form-signin" method="post" action="/add_survey/">
-        <!--      <h1 class="h3 mb-3 font-weight-normal">北京中医药中医药大学</h1>-->
-        <h1 class="h3 mb-3 font-weight-normal">请输入本次随访信息</h1>
-
-        <label class="sr-only">患者姓名</label>
-        <input id="names" name="name" onchange="getIdnumbers();getPhone();" type="text" class="form-control"
-               placeholder="姓名" list="customer_names" required
-               autofocus>
-        <datalist id="customer_names"></datalist>
-
-<!--        <label class="sr-only">身份证号</label>-->
-<!--        <input id="id_number" name="id_number" type="text" class="form-control" placeholder="身份证号/年龄" list="idnumbers"-->
-<!--               required autofocus>-->
-<!--        <datalist id="idnumbers"></datalist>-->
-        <label class="sr-only">生日</label>
-        <input id="id_number" name="id_number" type="text" pattern="^[0-9]{8}|{19}$" class="form-control" placeholder="生日" list="idnumbers"
-               required autofocus>
-        <datalist id="idnumbers"></datalist>
-<!--pattern="^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$"-->
-        <label class="sr-only">电话</label>
-        <input id="phone" name="phone" type="text" class="form-control" placeholder="电话"
-               list="customer_phones" required autofocus>
-        <datalist id="customer_phones"></datalist>
-        {#        <label class="sr-only">第几次随访</label>#}
-        {#        <input name="sequence" type="text" class="form-control" placeholder="第几次随访" required autofocus>#}
-        <label class="sr-only"></label>
-{#        <input name="tag" type="text" class="form-control" placeholder="疾病分组" list="leixing" required autofocus>#}
-{#        <datalist id="leixing">#}
-{#            <option value="早期">#}
-{#            <option value="中期">#}
-{#            <option value="晚期">#}
-{#        </datalist>#}
-
-        <input name="docter_name" type="text" class="form-control" placeholder="医生" list="docters" required autofocus>
-        <datalist id="docters">
-            {#            <option value="wuwukai">#}
-            {#            <option value="中期">#}
-            {#            <option value="晚期">#}
-        </datalist>
-        <label class="sr-only">这次随访时间</label>
-        <span class="input-group-addon">这次随访时间：</span>
-        <input id="times" name="time" type="datetime-local" class="form-control"
-               required autofocus>
-        <label class="sr-only">下次随访时间</label>
-        <span class="input-group-addon">下次随访时间：</span>
-        <input id="times2" name="time2" type="datetime-local" class="form-control"
-               required autofocus>
-        <!--        <select id="cars" name="cars">-->
-        <!--                    <option value="volvo">Volvo</option>-->
-        <!--                    <option value="saab">Saab</option>-->
-        <!--                    <option value="fiat">Fiat</option>-->
-        <!--                    <option value="audi">Audi</option>-->
-        <!--                </select>-->
-        <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">提交</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-    </form>
-</div>
-<!--<form method="post" action="/add_survey/">
 <div class="container">
-    <div class="row">
-        <div class="col-sm-2">
-            患者姓名:
-            <input type="text" name= "name">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            身份证号:
-            <input type="text" name= "id">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            第几次随访:
-            <input type="text" name= "sequence">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <input type="submit" name= "submit" value="提交">
-        </div>
+    <div>
+        <form method="post" action="/add_survey/">
+            <!--      <h1 class="h3 mb-3 font-weight-normal">北京中医药中医药大学</h1>-->
+            <h1 class="h3 mb-3 font-weight-normal">请输入本次随访信息</h1>
+            <label class="sr-only">患者姓名</label>
+            <input id="names" name="name" onchange="getIdnumbers();getPhone();" type="text" class="form-control"
+                   placeholder="姓名" list="customer_names" style="width: 50%" required
+                   autofocus>
+            <datalist id="customer_names"></datalist>
+
+            <label class="sr-only">生日</label>
+            <input id="id_number" name="id_number" type="text" pattern="^[0-9]{8}|{19}$" class="form-control"
+                   placeholder="生日" list="idnumbers" style="width: 50%"
+                   required autofocus>
+            <datalist id="idnumbers"></datalist>
+
+            <label class="sr-only">电话</label>
+            <input id="phone" name="phone" type="text" class="form-control" placeholder="电话"
+                   list="customer_phones" style="width: 50%" required autofocus>
+            <datalist id="customer_phones"></datalist>
+
+            <input name="docter_name" type="text" class="form-control" placeholder="医生" list="docters"
+                   style="width: 50%" required
+                   autofocus>
+            <datalist id="docters">
+
+            </datalist>
+            <label class="sr-only" >这次随访时间</label>
+            <span class="input-group-addon" style="width: 35%">这次随访时间：</span>
+            <input id="times" name="time" type="datetime-local" class="form-control" style="width: 50%"
+                   required autofocus>
+            <label class="sr-only">下次随访时间</label>
+            <span class="input-group-addon" style="width: 35%">下次随访时间：</span>
+            <input id="times2" name="time2" type="datetime-local" class="form-control" style="width: 50%"
+                   required autofocus>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit" style="width: 50%">提交</button>
+            <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+        </form>
     </div>
 </div>
-</form>-->
-
 </body>
 </html>
